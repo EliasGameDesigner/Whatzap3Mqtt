@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatZap 3</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="contacts">
+            <div class="contact" id="contact-1">
+                <img src="https://via.placeholder.com/50" alt="Contact 1">
+                <span>Contact 1</span>
+            </div>
+            <div class="contact" id="contact-2">
+                <img src="https://via.placeholder.com/50" alt="Contact 2">
+                <span>Contact 2</span>
+            </div>
+        </div>
+        <div class="chat">
+            <div class="chat-header">
+                <h2 id="chat-title">Chat with Contact 1</h2>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Mensagens do chat serão renderizadas aqui -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Digite uma mensagem...">
+                <button id="send-button">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    
+</body>
+</html>

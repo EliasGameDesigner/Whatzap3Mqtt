@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conecção MQTT</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+    
+</head>
+
+
+<style>
+    #resposta{
+        width: 600px;
+        height: 500px;
+        overflow-y: scroll;
+        background-color: lightblue;
+
+    }  
+</style>
+
+
+<body>
+
+    <div class="rodape">
+    apelido: <input type="text"  id="apelido" size="6">
+    Mensagem: <input type="text"  id="texto" size="50">
+    <button onclick="Enviar();">OK</button>
+    <button onclick="EnviarBeijo();">Beijo</button>
+
+    <br> <br>
+
+    
+
+
+    
+</div>
+<br> <br>
+    <div id="chatbox">
+        
+    </div>
+
+    
+
+
+
+
+
+
+
+<img src="" width="">
+
+
+</body>
+
+
+<script>
+
+
+
+
+// cria o tópico (variavel) que será acessado pelos PCs
+// todo PC que Usar este Tópico conseguirá receber as Mensagens
+topico = "cedup/texto";
+
+
+//cria um cliente para se conectar ao servidor MQTT na porta 8000
+
+client = new Paho.MQTT.Client("broker.hivemq.com", Number(8000), "")
+client.connect({onSuccess:Conectou})
+
+function Conectou(){
+    //envia o tópico (variável) lida por todos os computadores
+
+    client.subscribe(topico)
+    message = new Paho.MQTT.Message('')
+    message.destinationName = topico
+}
+
+
+//Criando as funções: Conexao_Perdida e Mensagem_Chegou
+
+
+client.onConnectionLost = Conexao_perdida
+client.onMessageArrived = Mensagem_Chegou
+
+
+
+//Se perder a conexao será executada essa função:
+
+function Conexao_perdida(responseObject) {
+    if(responseObject.errorCode !== 0){
+        chatbox.innerHTML += "Desconectado: " + responseObject.errorMessage
+    }
+    
+}
+
+
+
+// sempre que alguem atualizar o topico cedup/texto esta função é executada
+
+
+function Mensagem_Chegou(message){
+    chatbox.innerHTML += "<br>"
+    chatbox.innerHTML += message.payloadString
+}
+
+
+
+
+function Enviar(){
+    valor = "<div class='tuamsg'>" + apelido.value + ": " + texto.value + "</dv>"
+    message = new Paho.MQTT.Message(valor)
+    message.destinationName = topico
+    client.send(message)
+}
+
+
+
+
+
+
+
+</script>
+
+</html>
