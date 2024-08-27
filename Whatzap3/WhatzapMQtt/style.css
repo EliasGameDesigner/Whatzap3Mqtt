@@ -1,0 +1,58 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+body{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    background-color: black;
+    flex-direction: column;
+}
+
+
+.rodape{
+    
+    background-color: rgb(218, 212, 212);
+    width: 80vw;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid;
+    border-radius: 20px;
+    position: absolute;
+    bottom: 20px;
+    margin-top: 5px;
+}
+
+
+#chatbox{
+    
+    height: 87vh;
+    width: 99vw;
+    background-color: rgb(215, 243, 243);
+    overflow: auto;
+    /* margin-top: -26px; */
+    margin-top: -36px;
+    
+}
+.chatbox:hover{
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+button{
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tuamsg{
+    
+    height: auto;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}

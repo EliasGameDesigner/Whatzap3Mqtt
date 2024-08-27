@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atizapi</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(212, 255, 148);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tudo {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            align-items: center;
+
+        }
+
+        .topo {
+            width: 100%;
+            height: 10%;
+            background-color: rgb(252, 225, 225);
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+
+        .foto_de_perfil {
+            background-color: red;
+            height: 100%;
+            width: 5%;
+            border-radius: 50%;
+        }
+
+        .meio {
+            width: 100%;
+            height: 90%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .lista_de_contatos {
+            background-color: rgb(255, 249, 242);
+            width: 20%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: scroll;
+        }
+
+        .contato {
+            width: 100%;
+            height: 10%;
+            background-color: red;
+            border-radius: 2%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .img_ctt {
+            background-color: blue;
+            width: 20%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .nome_ctt {
+            width: 80%;
+            height: 100%;
+            background-color: burlywood;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+        }
+
+        .conversa {
+            background-color: rgb(214, 212, 210);
+            width: 80%;
+            height: 100%;
+        }
+
+
+        .chat-input{
+            width: 100%;
+            height: 10%;
+            display: flex;
+            justify-content: space-around;
+            justify-items: center;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .chatmessages{
+            height: 80%;
+            width: 100%;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+    <div class="tudo" id="tudo">
+        <div class="topo" id="topo">
+            <div class="foto_de_perfil"></div>
+        </div>
+
+        <div class="meio" id="meio">
+
+            <div class="lista_de_contatos" id="lista_de_contatos">
+                <div class="contato" id="contato-1">
+                    <div class="img_ctt" id="img_ctt">
+                        <img src="jarson.png" alt="jarson_img" width="100%" height="100%">
+                    </div>
+                    <div class="nome_ctt" id="nome_ctt">
+                        jarson
+                    </div>
+
+
+                    
+                </div>
+                <div class="contato" id="contato-2">
+                    <div class="img_ctt" id="img_ctt">
+                        <img src="jarson.png" alt="jarson_img" width="100%" height="100%">
+                    </div>
+                    <div class="nome_ctt" id="nome_ctt">
+                        hameses
+                    </div>
+
+
+                    
+                </div>
+            </div>
+
+            
+
+            <div class="chat" id="chat">
+                <div id="chatmessages" class="chatmessages">
+
+                </div>
+                <div id="chat-input" class="chat-input">
+                    <input type="text" id="apelido" class="Apelido" size="10">
+                    <input type="text" id="message-input" class="Mensagem" size="40">
+                    <button onclick="Enviar();" id="send-button" class="send-button">Enviar</button>
+                    <button onclick="EnviarBanana();">B?</button>
+                </div>
+
+                
+                
+            </div>
+
+            </div>
+            <script src="script.js"></script>
+
+                
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>
