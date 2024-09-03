@@ -5,186 +5,167 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atizapi</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
-    
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100vh;
-            margin: 0;
-            background-color: rgb(212, 255, 148);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tudo {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            flex-wrap: nowrap;
-            align-items: center;
-
-        }
-
-        .topo {
-            width: 100%;
-            height: 10%;
-            background-color: rgb(252, 225, 225);
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
-        }
-
-        .foto_de_perfil {
-            background-color: red;
-            height: 100%;
-            width: 5%;
-            border-radius: 50%;
-        }
-
-        .meio {
-            width: 100%;
-            height: 90%;
-            display: flex;
-            flex-direction: row;
-        }
-
-        .lista_de_contatos {
-            background-color: rgb(255, 249, 242);
-            width: 20%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            overflow-y: scroll;
-        }
-
-        .contato {
-            width: 100%;
-            height: 10%;
-            background-color: red;
-            border-radius: 2%;
-            display: flex;
-            flex-direction: row;
-        }
-
-        .img_ctt {
-            background-color: blue;
-            width: 20%;
-            height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .nome_ctt {
-            width: 80%;
-            height: 100%;
-            background-color: burlywood;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-
-        }
-
-        .conversa {
-            background-color: rgb(214, 212, 210);
-            width: 80%;
-            height: 100%;
-        }
-
-
-        .chat-input{
-            width: 100%;
-            height: 10%;
-            display: flex;
-            justify-content: space-around;
-            justify-items: center;
-            padding: 10px;
-            border-top: 1px solid #ccc;
-        }
-
-        .chat{
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-
-        }
-
-        .chatmessages{
-            height: 80%;
-            width: 100%;
-        }
-
-
-
-    </style>
+    <title>Formulário</title>
+    <link rel="stylesheet" href="Formulário.css">
 </head>
 
 <body>
-    <div class="tudo" id="tudo">
-        <div class="topo" id="topo">
-            <div class="foto_de_perfil"></div>
-        </div>
+    <form id="formcad">
+        <h1>Perfil</h1>
+        <label for="uid">Nome*</label>
+        <input type="text" name="uid" id="uid" required pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$">
+        <br>
+        <label> Gênero: </label>
+        <label for="masc">Masculino
+            <input type="radio" name="gen" id="masc" value="masc">
+        </label>
+        <label for="fem">Feminino
+            <input type="radio" name="gen" id="fem" value="fem">
+        </label>
+        <label for="outros">Outros
+            <input type="radio" name="gen" id="outros" value="outros">
+        </label>
+        <br>
+        <label for="nasc">Data de nascimento</label>
+        <input type="date" name="nasc" id="nasc">
+        <label for="idade">Idade</label>
+        <input type="text" name="idade" id="idade" disabled>
+        <br>
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Enter your bio" maxlength="200"></textarea>
+        <br>
+        <input type="reset" value="Limpar">
+        <input type="submit" value="Enviar">
+        <input type="button" value="Login" id="loginButton">
+    </form>
 
-        <div class="meio" id="meio">
+    <form action="login" id="loginForm" style="display:none;">
+        <h1>Login</h1>
+        <label for="uid">Nome*</label>
+        <input type="text" name="uid" id="loginUid" required pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$">
+        <input type="submit" value="Enviar">
+        <br>
+        <input type="button" value="cadastrar" id="cadastarButton">
+    </form>
 
-            <div class="lista_de_contatos" id="lista_de_contatos">
-                <div class="contato" id="contato-1">
-                    <div class="img_ctt" id="img_ctt">
-                        <img src="jarson.png" alt="jarson_img" width="100%" height="100%">
-                    </div>
-                    <div class="nome_ctt" id="nome_ctt">
-                        jarson
-                    </div>
+    <script>
+        function redirectToChatApp() {
+            window.location.href = 'ChatApp.html';
+        }
 
+        const request = indexedDB.open('chatAppDB', 1);
 
-                    
-                </div>
-                <div class="contato" id="contato-2">
-                    <div class="img_ctt" id="img_ctt">
-                        <img src="jarson.png" alt="jarson_img" width="100%" height="100%">
-                    </div>
-                    <div class="nome_ctt" id="nome_ctt">
-                        hameses
-                    </div>
+        let db;
 
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            const objectStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+            objectStore.createIndex('name', 'name', { unique: false });
+        };
 
-                    
-                </div>
-            </div>
+        request.onsuccess = function (event) {
+            db = event.target.result;
 
-            
+            const form = document.getElementById('formcad');
+            const formLogin = document.getElementById('loginForm');
+            const botaoLogin = document.getElementById('loginButton');
+            const botaoCadastar = document.getElementById('cadastarButton');
 
-            <div class="chat" id="chat">
-                <div id="chatmessages" class="chatmessages">
+            botaoLogin.addEventListener('click', function () {
+                form.style.display = "none";
+                formLogin.style.display = "inline-block";
+            });
 
-                </div>
-                <div id="chat-input" class="chat-input">
-                    <input type="text" id="apelido" class="Apelido" size="10">
-                    <input type="text" id="message-input" class="Mensagem" size="40">
-                    <button onclick="Enviar();" id="send-button" class="send-button">Enviar</button>
-                    <button onclick="EnviarBanana();">B?</button>
-                </div>
+            botaoCadastar.addEventListener('click', function () {
+                form.style.display = "inline-block";
+                formLogin.style.display = "none";
+            });
 
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const uid = document.getElementById('uid').value;
+                const gen = document.querySelector('input[name="gen"]:checked') ? document.querySelector('input[name="gen"]:checked').value : '';
+                const nasc = document.getElementById('nasc').value;
+                const idade = calcularIdade(nasc);
+                const bio = document.getElementById('bio').value;
+
+                const transaction = db.transaction(['users'], 'readwrite');
+                const objectStore = transaction.objectStore('users');
+
+                const newUser = { name: uid, gender: gen, birthdate: nasc, age: idade, bio: bio };
+
+                const addRequest = objectStore.add(newUser);
+
+                addRequest.onsuccess = function () {
+                    alert('Perfil salvo com sucesso!');
+                    redirectToChatApp();
+                };
+
+                addRequest.onerror = function (event) {
+                    console.error('Erro ao salvar o perfil:', event.target.errorCode);
+                };
+            });
+
+            formLogin.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const loginUid = document.getElementById('loginUid').value;
+
+                const transaction = db.transaction(['users'], 'readonly');
                 
+                const objectStore = transaction.objectStore('users');
                 
-            </div>
 
-            </div>
-            <script src="script.js"></script>
+                let cursorRequest = objectStore.openCursor();
+                console.log(cursorRequest)
+                cursorRequest.onsuccess = function (event) {
+                    let cursor = event.target.result;
+                    if (cursor){
+                        
+                        if(cursor.value.name == loginUid){
+                            console.log('Chave:', cursor.key, 'Valor:', cursor.value);
+                            
+                            localStorage.setItem('loggedInUser', JSON.stringify(cursor.value));
+                            
+                             redirectToChatApp()
+                        }else{
+                            cursor.continue();
+                        }
+                        
+                    } else {
+                        console.log('Usuarui não encontrado');
+                    }
+                };
 
-                
-        </div>
-    </div>
 
+               
 
+                // getRequest.onerror = function (event) {
+                //     console.error('Erro ao procurar o usuário:', event.target.errorCode);
+                // };
+            });
 
+            document.getElementById('nasc').addEventListener('input', function () {
+                const idade = calcularIdade(this.value);
+                document.getElementById('idade').value = idade || '';
+            });
+        };
+
+        request.onerror = function (event) {
+            console.error('Erro ao abrir o banco de dados:', event.target.errorCode);
+        };
+
+        function calcularIdade(dataNasc) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNasc);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const m = hoje.getMonth() - nascimento.getMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            return idade;
+        }
+    </script>
 
 </body>
 

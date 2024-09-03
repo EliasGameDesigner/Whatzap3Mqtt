@@ -32,11 +32,7 @@ function Conexao_perdida(responseObject) {
 }
 
 
-let messagesHistory = {};       
-
-
-
-
+let messagesHistory = {};
 
 
 
@@ -120,7 +116,7 @@ contacts.forEach((contact) => {
     contact.addEventListener('click', () => {
         const contactId = contact.id;
         //chatTitle.textContent = `Chat com ${contactId === 'contact-1' ? 'Contato 1' : 'Contato 2'}`;
-        
+
         // Carregar histórico de mensagens
         trocarChat(contactId);
     });
@@ -134,3 +130,149 @@ sendButton.addEventListener('click', () => {
         messageInput.value = '';
     }
 });
+
+
+
+
+
+const request = indexedDB.open('chatAppDB', 1);
+
+
+request.onupgradeneeded = function (event) {
+    const db = event.target.result;
+
+    // Cria uma objectStore chamada "conversations" com a chave primária "conversationId"
+    if (!db.objectStoreNames.contains('conversations')) {
+        const objectStore = db.createObjectStore('conversations', { keyPath: 'conversationId' });
+    }
+};
+
+
+
+let thisUser;
+document.addEventListener('DOMContentLoaded', function () {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    thisUser = loggedInUser;
+    console.log(thisUser)
+    if (!loggedInUser) {
+        window.location.href = 'index.html';
+    }
+
+    const fotoDePerfil = document.getElementById('fotoDePerfil');
+    fotoDePerfil.addEventListener('click', function () {
+        alert(`Nome: ${loggedInUser.name}\nGênero: ${loggedInUser.gender}\nData de Nascimento: ${loggedInUser.birthdate}\nIdade: ${loggedInUser.age}\nBio: ${loggedInUser.bio}`);
+    });
+});
+
+
+
+
+
+
+
+request.onsuccess = function (event) {
+    db = event.target.result;
+
+
+    const botaoAdicionar = document.getElementById("botaoContato")
+
+
+    botaoAdicionar.addEventListener('click', function () {
+
+        const nomeContato = prompt('Digite o nome do contato que deseja adicionar:');
+
+        if (!nomeContato) return;
+        console.log("passou aqui")
+
+
+        console.log("passou o sucessso")
+        db = event.target.result;
+
+        const transaction = db.transaction(['users'], 'readonly');
+        const objectStore = transaction.objectStore('users');
+        let cursorRequest = objectStore.openCursor();
+
+        
+        console.log("a")
+
+        cursorRequest.onsuccess = function (event) {
+            const user = event.target.result;
+            
+            
+            if (user.value.name == nomeContato) {
+                // Adicionar o contato à lista de contatos
+                console.log("Usuario Encontrado" + user.value.name)
+                criarContatoNaLista(user);
+            } else {
+                user.continue();
+            }
+        };
+
+        cursorRequest.onerror = function (event) {
+            console.error('Erro ao procurar o usuário:', event.target.errorCode);
+        };
+
+
+
+
+
+
+
+
+
+
+    })
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function criarContatoNaLista(user) {
+    const listaDeContatos = document.getElementById('lista_de_contatos');
+    const contato = document.createElement('div');
+    contato.className = 'contato';
+    contato.id = thisUser.id + user.value.id;
+    console.log(thisUser.id, user.value.id)
+    console.log(contato.id)
+
+    contato.innerHTML = `
+                        <div class="img_ctt">
+                            <img src="jarson.png" alt="${user.value.name}_img" width="100%" height="100%">
+                        </div>
+                        <div class="nome_ctt">${user.value.name}</div>
+                    `;
+
+    contato.addEventListener('click', () => {
+        trocarChat(contato.id);
+    });
+
+    listaDeContatos.appendChild(contato);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

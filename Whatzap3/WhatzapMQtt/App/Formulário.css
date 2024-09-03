@@ -1,0 +1,36 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+} 
+
+body {
+    font-family: 'Calibri Light', calibri, Arial, Helvetica, sans-serif;
+    ;
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    border: 2px solid black;
+    margin: 20px auto;
+    width: 75%;
+    border-radius: 10px;
+    box-shadow: inset 2px 6px 20px #000;
+    text-shadow: 0px 1px 3px black;
+    background: radial-gradient(rgb(255, 255, 255) 0%, transparent 80%),
+        linear-gradient(rgb(206, 206, 206) 10%, rgb(255, 255, 255) 100%);
+    padding: 12px;
+    text-align: center;
+    font-size: 200%;
+    padding: 20px;
+    display: inline-block;
+}
+
+
+#loginForm{
+    display: none;
+}
+
